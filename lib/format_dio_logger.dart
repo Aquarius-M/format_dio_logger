@@ -89,7 +89,7 @@ class FormatDioLogger extends Interceptor {
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     if (responseBody) {
       _printBoxHeader(
-        header: "Response ║ ${response.requestOptions.method} ╠",
+        header: "Response ║ ${response.requestOptions.method} ║ Status: ${response.statusCode} ${response.statusMessage} ╠",
         text: response.requestOptions.uri.toString(),
       );
       if (responseHeader) {
