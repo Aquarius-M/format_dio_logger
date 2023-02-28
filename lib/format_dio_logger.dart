@@ -114,16 +114,20 @@ class FormatDioLogger extends Interceptor {
         color: _errorColor,
       );
       _printSubHeader(header: "Detail", color: _errorColor,);
-      _print("$_errorColor║ type: ${err.type}\x1b[0m");
-      _print("$_errorColor║ msg: ${err.error}\x1b[0m");
+      _print("$_errorColor║ type: ${err.type}");
+      _print("$_errorColor║ msg: ${err.error}");
+      if (err.response != null) {
+        _printSubHeader(header: "Error Body", color: _errorColor,);
+        _printResponseBody(err.response, color: _errorColor);
+      }
       _printLine(pre: "╚", color: _errorColor);
     }
     super.onError(err, handler);
   }
 
   /// 打印响应体
-  void _printResponseBody(Response response) {
-    String data = _prettyJson(response.data).replaceAll("\n", "\n║");
+  void _printResponseBody(Response? response, {String ? color}) {
+    String data = _prettyJson(response?.data).replaceAll("\n", "\n║");
     List<String> list = data.split("\n║");
     for (var value in list) {
       if (value.length > maxWidth) {
@@ -138,10 +142,10 @@ class FormatDioLogger extends Interceptor {
         for (int i = 0; i < lines; i++) {
           int start = i * lineWidth;
           int end = math.min<int>((i + 1) * lineWidth, value.length);
-          _print("║$space${value.substring(start, end)}");
+          _print("${color ?? ''}║$space${value.substring(start, end)}");
         }
       } else {
-        _print("║$value");
+        _print("${color ?? ''}║$value");
       }
     }
   }
@@ -149,14 +153,14 @@ class FormatDioLogger extends Interceptor {
   /// 打印盒子头部
   void _printBoxHeader({String? header, String? text, String? color}) {
     header = '╔╣ $header';
-    _print('${color ?? ''}$header${'═' * (maxWidth - header.length)}╗\x1b[0m');
-    _print('${color ?? ''}╟  $text\x1b[0m');
+    _print('${color ?? ''}$header${'═' * (maxWidth - header.length)}╗');
+    _print('${color ?? ''}╟  $text');
   }
 
   /// 打印副头部
   void _printSubHeader({String? header, String? color}) {
     String body = '╠═ $header ';
-    _print("${color ?? ''}$body${'┄' * (maxWidth - body.length)}\x1b[0m");
+    _print("${color ?? ''}$body${'┄' * (maxWidth - body.length)}");
   }
 
   /// 打印整个map数据
@@ -174,12 +178,12 @@ class FormatDioLogger extends Interceptor {
 
   /// 打印分割线
   void _printLine({String pre = '', String suf = '╝', String? color}) {
-    _print('${color ?? ''}$pre${'═' * (maxWidth - 1)}$suf\x1b[0m');
+    _print('${color ?? ''}$pre${'═' * (maxWidth - 1)}$suf');
   }
 
   void _print(String msg) {
     if (kDebugMode) {
-      logPrint(msg);
+      logPrint("$msg\x1b[0m");
     }
   }
 }
