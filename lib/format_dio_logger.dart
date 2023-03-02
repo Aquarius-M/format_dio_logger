@@ -127,7 +127,7 @@ class FormatDioLogger extends Interceptor {
 
   /// 打印响应体
   void _printResponseBody(Response? response, {String ? color}) {
-    String data = _prettyJson(response?.data).replaceAll("\n", "\n║");
+    String data = _prettyJson((response?.data is String) ? jsonDecode(response?.data) : response?.data).replaceAll("\n", "\n║");
     List<String> list = data.split("\n║");
     for (var value in list) {
       if (value.length > maxWidth) {
