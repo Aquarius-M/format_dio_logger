@@ -100,8 +100,8 @@ class FormatDioLogger extends Interceptor {
       }
       _printSubHeader(header: "Body");
       _printResponseBody(response);
-    }
     _printLine(pre: "╚");
+    }
     super.onResponse(response, handler);
   }
 
