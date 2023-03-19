@@ -67,7 +67,7 @@ class PrettyUtil {
   /// 格式化
   String _pretty(dynamic message) {
     try {
-      final finalMessage = message is Function ? message() : message;
+      final finalMessage = message is String ? jsonDecode(message) : message;
       if (finalMessage is Map || finalMessage is Iterable) {
         var spaces = ' ' * 4;
         var encoder = JsonEncoder.withIndent(spaces, (msg) => msg.toString());
